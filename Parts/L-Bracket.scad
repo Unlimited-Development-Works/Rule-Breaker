@@ -4,6 +4,7 @@ module bolt_hole_3m() {
 
 module l_bracket() {
     difference() {
+        color("silver")
         cube([20, 30, 1.5]);
         
         union() {
