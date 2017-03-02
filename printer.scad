@@ -1,5 +1,6 @@
 // Printer
 include <Parts/Makerbeam.scad>;
+include <Parts/L-Bracket.scad>
 
 module printer() {
     // column 1 (C1)
@@ -45,5 +46,13 @@ module printer() {
     rotate([0, 0, 90])
         translate([-220, -210, 290])
             makerbeam_200();
+    // bracket 1 (L1)
+    translate([30, 1.5, 20])
+        rotate([0, 90 ,90])
+            l_bracket();
+    // bracket 2 (L2)
+    translate([-1.5, -30, 20])
+        rotate([0, 90 ,0])
+            l_bracket();
 }
 render() printer();
