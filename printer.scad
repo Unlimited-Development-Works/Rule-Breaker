@@ -47,7 +47,7 @@ module printer() {
         translate([-220, -210, 290])
             makerbeam_200();
     // bracket 1 (L1)
-    translate([30, 1.5, 20])
+    translate([30, 0, 20])
         rotate([0, 90 ,90])
             l_bracket();
     // bracket 2 (L2)
