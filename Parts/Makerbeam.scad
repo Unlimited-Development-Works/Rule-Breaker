@@ -1,51 +1,51 @@
 module makerbeam_300() {
-    makerbeam([10, 300, 10]);
+    makerbeam(300);
 }
 
 module makerbeam_200() {
-    makerbeam([10, 200, 10]);
+    makerbeam(200);
 }
 
 module makerbeam_150() {
-    makerbeam([10, 150, 10]);
+    makerbeam(150);
 }
 
 module makerbeam_100() {
-    makerbeam([10, 100, 10]);
+    makerbeam(100);
 }
 
 module makerbeam_60() {
-    makerbeam([10, 60, 10]);
+    makerbeam(60);
 }
 
 module makerbeam_40() {
-    makerbeam([10, 40, 10]);
+    makerbeam(40);
 }
 
-module makerbeam(size) {
-    
-    x = size[0];
-    y = size[1];
-    z = size[2];
+module makerbeam(length) {
+    x = 10;
+    y = length;
+    z = 10;
+    gap = 3;
+    corner = (x - gap) / 2;
     color("DimGray") {
         translate([0, 0, 0])
-            cube([x / 3, y, z / 3]);
+            cube([corner, y, corner]);
 
-        translate([x * 2/3, 0, 0])
-            cube([x / 3, y, z / 3]);
+        translate([corner + gap, 0, 0])
+            cube([corner, y, corner]);
 
-        translate([x * 2/3, 0, z * 2/3])
-            cube([x / 3, y, z / 3]);
+        translate([0, 0, corner + gap])
+            cube([corner, y, corner]);
 
-        translate([0, 0, z * 2/3])
-            cube([x / 3, y, z / 3]);
+        translate([corner + gap, 0, corner + gap])
+            cube([corner, y, corner]);
 
-        translate([x / 4, 0, z / 4])
-            cube([x / 2, y, z / 2]);
+        translate([3, 0, 3])
+            cube([4, y, 4]);
     }
 }
 
-// demo();
 module demo() {
     makerbeam_300();
 
@@ -64,3 +64,5 @@ module demo() {
     translate([150, 0, 0])
         makerbeam_40();
 }
+
+demo();

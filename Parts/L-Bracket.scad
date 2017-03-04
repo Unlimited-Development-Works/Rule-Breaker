@@ -16,3 +16,4 @@ module l_bracket() {
         }
     }
 }
+l_bracket();

@@ -1,6 +1,6 @@
 // Printer
-include <Parts/Makerbeam.scad>;
-include <Parts/L-Bracket.scad>;
+use <Parts/Makerbeam.scad>;
+use <Parts/L-Bracket.scad>;
 
 module side_brackets() {
     // bottom right

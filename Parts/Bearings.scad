@@ -17,3 +17,4 @@ module LM8UU() {
         }
     }
 }
+LM8UU();

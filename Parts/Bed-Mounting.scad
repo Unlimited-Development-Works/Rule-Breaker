@@ -43,3 +43,4 @@ module mount() {
     cube([150, 150, 3]);
 }
 
+main();
