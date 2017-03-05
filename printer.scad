@@ -1,6 +1,7 @@
 // Printer
 use <Parts/Makerbeam.scad>;
 use <Parts/L-Bracket.scad>;
+use <Parts/Bearing-Mount.scad>;
 
 module side_brackets() {
     // bottom right
@@ -81,5 +82,8 @@ module printer() {
         translate([-220, -210, 290])
             makerbeam_200();
     frame_brackets();
+	rotate([0, 180, 0])
+		translate([-110, -35, -310])
+			bearing_mount_with_bearing();
 }
 printer();
