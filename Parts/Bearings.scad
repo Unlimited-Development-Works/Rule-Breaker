@@ -2,15 +2,18 @@
 //2 grooves with 14.5mm outer diameter
 //Grooves vary in width between 1mm and 1.25mm
 
+LM8UU_Diameter = 15;
+LM8UU_Height = 24;
+
 module LM8UU() {
     difference() {
-        cylinder(d = 15, 24, $fn = 75);
+        cylinder(d = LM8UU_Diameter, LM8UU_Height, $fn = 75);
         union() {
             translate([0, 0, -12]) cylinder(d = 8, 48, $fn = 35);
             difference() {
                 translate([0, 0, 3.25]) cylinder(d = 20, 17.5);
                 union() {
-                    cylinder(d = 14, 24, $fn = 45);
+                    cylinder(d = 14, LM8UU_Height, $fn = 45);
                     translate([0, 0, (17.5 - 15.1) / 2 + 3.25]) cylinder(d = 48, 15.1);
                 }
             }
