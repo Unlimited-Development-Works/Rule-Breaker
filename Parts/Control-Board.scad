@@ -1,0 +1,10 @@
+CONTROL_BOARD_LENGTH=110;
+CONTROL_BOARD_WIDTH=60;
+CONTROL_BOARD_HEIGHT=45;
+module control_board() {
+    color("yellow"){
+		cube([CONTROL_BOARD_LENGTH, CONTROL_BOARD_WIDTH, CONTROL_BOARD_HEIGHT]);
+	}
+}
+
+control_board();
