@@ -4,9 +4,9 @@ use <Bearings.scad>;
 use <Makerbeam.scad>;
 use <Color.scad>;
 use <Motors.scad>;
+use <Bevel-Gear.scad>;
 
 module z_axis() {
-
     translate([100, -35, 0])
     union() {
         //Top threaded mounting point
@@ -19,7 +19,9 @@ module z_axis() {
 
         //Motor on threaded rod
         translate([-90, 0, 0]) rotate([0, -90, 180])
-        motor_42BYGHW811();
+	        motor_42BYGHW811();
+			translate([100, 0, 0])
+				bevel_gear();
 
         //screw bearing on threaded rod
         brass() translate([-25, 0, 55]) TTypeLeadScrew();
