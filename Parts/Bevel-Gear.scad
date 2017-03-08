@@ -125,24 +125,22 @@ module geartooth (diam1, diam2, xthickness, tlength, zthick, point){
 
 }
 /*---------------------------------------------------------*/
-gear (basediameter, depth, degrees, dedendum, addendum, toothwidth, teethnumber, toothshape);
-
-if (rbasediameter > 0) {
-
-	translate ([0, 0, depth/2 + rdepth/2])
-	gear (rbasediameter, rdepth, rdegrees, rdedendum, raddendum, rtwidth, rteeth, rtoothshape);
-
-}
+module bevel_gear () {
+	gear (basediameter, depth, degrees, dedendum, addendum, toothwidth, teethnumber, toothshape);
+	if (rbasediameter > 0) {
+		translate ([0, 0, depth/2 + rdepth/2])
+		gear (rbasediameter, rdepth, rdegrees, rdedendum, raddendum, rtwidth, rteeth, rtoothshape);
+	}
 
 //More trig to find top diameter:
 
 	triangbase = depth / tan(degrees);
 	topdiameter =  (basediameter - 2 * triangbase);
 
-if (rbasediameter == 0 && extendbevel == 1) {
-
-	translate ([0, 0, depth/2 + bdepth/2])
-	gear (topdiameter, bdepth, 90, dedendum, addendum, toothwidth, teethnumber);
-
+	if (rbasediameter == 0 && extendbevel == 1) {
+		translate ([0, 0, depth/2 + bdepth/2])
+		gear (topdiameter, bdepth, 90, dedendum, addendum, toothwidth, teethnumber);
+	}
 }
 
+bevel_gear();
