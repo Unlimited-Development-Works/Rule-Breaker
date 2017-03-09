@@ -43,6 +43,12 @@ raddendum = 1/4;     // addendum
 rdedendum = 1/4;     // dedendum
 rtoothshape = 1;
 
+//Mounting:
+
+mountingwall = 2;
+nuthole = 5.5;
+nutholedepth = 2.5;
+
 /*---------------------------------------------------------*/
 
 // Modules
@@ -141,6 +147,23 @@ module bevel_gear () {
 		translate ([0, 0, depth/2 + bdepth/2])
 		gear (topdiameter, bdepth, 90, dedendum, addendum, toothwidth, teethnumber);
 	}
+
+	translate([0, 0, -(depth / 2)])
+		rotate([0, 180, 0])
+			difference() {
+				cylinder(d = holediam + (mountingwall * 6), h = depth);
+				translate([0, 0, -1]) {
+					cylinder(d = holediam, h = depth + 2, $f = 20);
+				}
+				rotate([-90, 0, 0]) {
+					translate([0, -(depth / 2), 0])
+						cylinder(d = 2.7, h = 100, $fn = 20);
+				}
+				rotate([0, 90, 90]) {
+					translate([-9, -(nuthole / 2), holediam - (nutholedepth - 1)])
+						cube([depth + 1, nuthole, nutholedepth]);
+				}
+			}
 }
 
 bevel_gear();
