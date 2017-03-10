@@ -9,7 +9,7 @@ depth = 8;           // depth of the gear
 holediam = 5;        // diameter of center hole
 teethnumber = 32;    // number of teeth
 toothwidth = 1;      // width of teeth
-addendum = 1/2;      // addendum
+addendum = 2;      // addendum
 dedendum = 1/2;      // dedendum
 toothshape = 0;   // how much of the tooth is triangular			                // for no triangles, make it 0
 				 // otherwise it should be a fraction
