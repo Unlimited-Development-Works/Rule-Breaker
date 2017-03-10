@@ -4,7 +4,7 @@ use <Bearings.scad>;
 use <Makerbeam.scad>;
 use <Color.scad>;
 use <Motors.scad>;
-use <Bevel-Gear.scad>;
+use <../Libs/Bevel-Gear.scad>;
 
 module z_axis() {
     translate([100, -35, 0])
