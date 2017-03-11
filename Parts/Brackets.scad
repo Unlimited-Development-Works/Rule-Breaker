@@ -1,7 +1,7 @@
 use <Color.scad>;
 
 module bracket_bolt_hole_3m() {
-        cylinder(h = 10, d = 3, $fn = 18);
+        cylinder(h = 10, d = 3.2, $fn = 18);
     }
 
 module l_bracket() {
@@ -28,9 +28,8 @@ module l_bracket_inner() {
         }
 
         union() {
-            translate([-5, 7, 5]) rotate([0, 90, 0]) bracket_bolt_hole_3m();
-            translate([-5, 16, 5]) rotate([0, 90, 0]) bracket_bolt_hole_3m();
-            translate([-5, 25, 5]) rotate([0, 90, 0]) bracket_bolt_hole_3m();
+            translate([-5, 10, 5]) rotate([0, 90, 0]) bracket_bolt_hole_3m();
+            translate([-5, 22, 5]) rotate([0, 90, 0]) bracket_bolt_hole_3m();
 
             translate([7, 5, 5]) rotate([90, 0 , 0]) bracket_bolt_hole_3m();
             translate([16, 5, 5]) rotate([90, 0, 0]) bracket_bolt_hole_3m();
