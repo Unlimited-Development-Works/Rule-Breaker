@@ -1,48 +1,25 @@
 // Printer
 use <Makerbeam.scad>;
-use <L-Bracket.scad>;
+use <Brackets.scad>;
 use <Bearing-Mount.scad>;
 use <Power-Supply.scad>;
+use <Color.scad>;
 
 module frame() {
 
     module brackets() {
 
         module side_brackets() {
-            // bottom right
-            translate([30, 0, 20])
-                rotate([0, 90 ,90])
-                    l_bracket();
-            // bottom left
-            translate([190, 1.5, 20])
-                rotate([0, 90 ,-90])
-                    l_bracket();
-            // top left
-            translate([190, 0, 280])
-                rotate([0, -90 ,-90])
-                    l_bracket();
-            // top right
-            translate([30, 1.5, 280])
-                rotate([0, -90 ,90])
-                    l_bracket();
+            translate([10, 0, 10]) rotate([90, 0, 0]) l_bracket_inner();
+            translate([10, 0, 290]) rotate([90, 90, 0]) l_bracket_inner();
+            translate([210, 0, 290]) rotate([90, 180, 0]) l_bracket_inner();
+            translate([210, 0, 10]) rotate([90, 270, 0]) l_bracket_inner();
         }
 
-        // back brackets
         side_brackets();
-
-        // left brackets
-        rotate([0, 0, -90])
-            translate([0, -1.5, 0])
-                side_brackets();
-
-        // right brackets
-        rotate([0, 0, -90])
-            translate([0, 220, 0])
-                side_brackets();
-
-        // front brackets
-        translate([0, -221.5, 0])
-            side_brackets();
+        translate([0, -220, 0]) rotate([0, 0, 90]) side_brackets();
+        translate([220, -220, 0]) rotate([0, 0, 180]) side_brackets();
+        translate([220, 0, 0]) rotate([0, 0, 270]) side_brackets();
     }
 
     module bars() {
@@ -83,3 +60,5 @@ module frame() {
     brackets();
     bars();
 }
+
+frame();
