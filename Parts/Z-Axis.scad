@@ -4,22 +4,28 @@ use <Bearings.scad>;
 use <Makerbeam.scad>;
 use <Color.scad>;
 use <Motors.scad>;
+use <../Libs/Bevel-Gear.scad>;
 
 module z_axis() {
-
     translate([100, -20, 0])
     union() {
         //Top threaded mounting point
-        translate([-25, 0, 307]) rotate([0, 180, 0])
+        translate([-10, 0, 307]) rotate([0, 180, 0])
             bearing_mount_with_bearing();
 
         //vertical rods
-        translate([-25, 0, 25]) cylinder(d = 8, 282, $fn = 25);
-        translate([50, 0, 17]) cylinder(d = 8, 290, $fn = 25);
+        translate([-10, 0, 0]) cylinder(d = 8, 310, $fn = 25);
+        translate([50, 0, 0]) cylinder(d = 8, 310, $fn = 25);
 
         //Motor on threaded rod
-        translate([-90, 0, 0]) rotate([0, -90, 180])
-        motor_42BYGHW811();
+        translate([-90, 20, 0]) rotate([0, -90, 180])
+	        motor_42BYGHW811();
+        //Bevel Gears
+			rotate([0, 90, 0])
+				translate([-21, -1, -22])
+					bevel_gear();
+			translate([-10, -1, 8])
+				bevel_gear();
 
         //screw bearing on threaded rod
         translate([-25, 0, 55]) TTypeLeadScrew();
