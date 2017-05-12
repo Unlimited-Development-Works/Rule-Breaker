@@ -10,55 +10,36 @@ beltup_demo();
 module beltup_demo() {
 
     //Specify all the parts of the assembly
-    belt = beltup_specify_belt(10, 2, 1, 1, 1);
-    w07 = beltup_specify_wheel(7);
-    w14 = beltup_specify_wheel(14);
-    w21 = beltup_specify_wheel(21);
+    belt = beltup_specify_belt(6, 1, 1, 1, 1);
+    w07 = beltup_specify_wheel(7, hole_radius = 6);
+    w14 = beltup_specify_wheel(14, hole_radius = 10);
+    w21 = beltup_specify_wheel(21, hole_radius = 15);
 
     //trivial 0 wheel system
-    translate([0, 0, 0])
-    beltup(belt, [
-        beltup_cmd_goto([0, 0]),
-        beltup_cmd_goto([30, 30]),
-    ]);
+    translate([3, 0, 0])
+        beltup_render_straight_belt(belt, [-10, 10], [10, -20], flip = false);
+    translate([-3, 0, 0])
+        beltup_render_straight_belt(belt, [-10, 10], [10, -20], flip = true);
 
-    /* //trivial 1 wheel system
-    translate([0, 0, 0])
-    beltup(belt, [
-        beltup_cmd_goto([0, 0]),
-        beltup_cmd_wheel([30, 0], w07, teeth_in = true),
-        beltup_cmd_goto([30, 30]),
-    ]); */
+    //trivial 1 wheel system (no belt)
+    translate([0, 50, 0])
+        beltup_render_wheel(belt, w14);
 
-    /* translate([100, 0, 0])
-    //Complex 5 wheel concave system
-    beltup(belt, [
-        beltup_cmd_start_near([-100, -100]),
-        beltup_cmd_wheel([0, 0], w07, teeth_in = true),
-        beltup_cmd_wheel([70, 0], w07, teeth_in = true),
-        beltup_cmd_wheel([90, 90], w14, teeth_in = true),
-        beltup_cmd_wheel([40, 70], w07, teeth_in = false),
-        beltup_cmd_wheel([0, 110], w21, teeth_in = true),
-        beltup_cmd_close()
-    ]);
+    //trivial 1 wheel system
+    translate([50, 0, 0])
+    {
+        a = [-10, 0];
+        w = [20, 70];
+        b = [5, 30];
 
-    //Simple 2 wheel system (closed belt)
-    translate([300, 0, 0])
-    beltup(belt, [
-        beltup_cmd_start_near([-100, -100]),
-        beltup_cmd_wheel([0, 0], w07),
-        beltup_cmd_wheel([70, 0], w14),
-        beltup_cmd_close()
-    ]);
+        aw = beltup_wheel_tangent_in(belt, a, w14, w, false, true);
+        wb = beltup_wheel_tangent_out(belt, w14, w, b, true, true);
 
-    //Simple 2 wheel system (open belt)
-    translate([300, 100, 0])
-    beltup(belt, [
-        beltup_cmd_goto([10, 50]),
-        beltup_cmd_wheel([0, 0], w07),
-        beltup_cmd_wheel([70, 0], w14),
-        beltup_cmd_goto([70, 50])
-    ]); */
+        beltup_render_belt_tangent(belt, aw);
+        translate(w) beltup_render_wheel(belt, w14);
+        //beltup_render_curve_between_tangents(belt, a, false, w14, w, b, true, true);
+        beltup_render_belt_tangent(belt, wb);
+    }
 }
 
 /*
@@ -91,81 +72,136 @@ function beltup_num_teeth(belt_spec, length) = ceil(length / (beltup_spec_belt_t
    - outer_height_top       - What is the height of the guide above the belt
    - outer_height_bot       - What is the height of the guide below the belt
 */
-function beltup_specify_wheel(inner_radius, outer_radius = 2, outer_height_top = 1, outer_height_bot = 1) = [
+function beltup_specify_wheel(inner_radius, outer_radius = 2, outer_height_top = 1, outer_height_bot = 1, hole_radius = 0) = [
     "wheel",
     inner_radius,
     outer_radius,
     outer_height_top,
-    outer_height_bot
+    outer_height_bot,
+    hole_radius
 ];
 function beltup_spec_wheel_inner_rad(wheel_spec) = wheel_spec[1];
 function beltup_spec_wheel_outer_rad(wheel_spec) = wheel_spec[2];
 function beltup_spec_wheel_outer_z_top(wheel_spec) = wheel_spec[3];
 function beltup_spec_wheel_outer_z_bot(wheel_spec) = wheel_spec[4];
-
-/*
-  Specify a new position to put a wheel at
-   - pos        - 2D location of the wheel
-   - wheel      - A wheel specificication (see beltup_specify_wheel)
-*/
-function beltup_cmd_wheel(pos, wheel, teeth_in = true) = [
-    "cmd_wheel_at",
-    pos,
-    wheel,
-    teeth_in
-];
-function beltup_cmd_wheel_pos(at) = at[1];
-function beltup_cmd_wheel_wheel(at) = at[2];
-function beltup_cmd_wheel_teethin(at) = at[3];
-
-function beltup_cmd_goto(pos) = [
-    "cmd_goto",
-    pos
-];
-function beltup_cmd_goto_pos(cmd) = cmd[1];
-
-function beltup_cmd_start_near(pos) = [
-    "cmd_start_near",
-    pos
-];
-function beltup_cmd_start_near_pos(cmd) = cmd[1];
-
-function beltup_cmd_close() = [
-    "cmd_close"
-];
+function beltup_spec_wheel_hole_radius(wheel_spec) = wheel_spec[5];
 
 function beltup_type(object) = object[0];
 
-module beltup_straight_belt(belt_spec, length) {
+module beltup_render_wheel(belt_spec, wheel_spec) {
 
-    ty = beltup_spec_belt_tooth_length(belt_spec);
-    tz = beltup_spec_belt_tooth_height(belt_spec);
+    bw = beltup_spec_belt_width(belt_spec);
+    bt = beltup_spec_belt_thickness(belt_spec);
 
-    sy = beltup_spec_belt_tooth_separation(belt_spec);
+    ty = beltup_spec_belt_tooth_height(belt_spec);
 
-    num_teeth = beltup_num_teeth(belt_spec, length);
+    wir = beltup_spec_wheel_inner_rad(wheel_spec);
+    wor = beltup_spec_wheel_outer_rad(wheel_spec);
 
-    x = beltup_spec_belt_width(belt_spec);
-    y = length;
-    z = beltup_spec_belt_thickness(belt_spec);
+    arg_out_of_range(wir < (bt + ty), "beltup_cmd_wheel_wheel", "belt_radius", "Must be &gt;= belt_thickness + tooth_height")
+    {
+        difference() {
+            union()
+            {
+                translate([0, 0, -1]) cylinder(r = wir, h = bw + 2, $fn = 100);
+                translate([0, 0, -2]) cylinder(r = wir + wor, h = 1, $fn = 23);
+                translate([0, 0, bw + 1]) cylinder(r = wir + wor, h = 1, $fn = 23);
+            }
 
-    intersection() {
-
-        cube([x, y, z + tz + 1]);
-
-        union() {
-            cube([x, y, z]);
-
-            for(offset = [0 : num_teeth])
-            translate([0, offset * (sy + ty), z])
-                cube([x, ty, tz]);
+            translate([0, 0, -bw])
+                cylinder(r = beltup_spec_wheel_hole_radius(wheel_spec), h = bw * 3, $fs = 0.1);
         }
     }
 }
 
-module beltup(belt, commands, closed) {
+module beltup_render_straight_belt(belt_spec, a, b, flip = false) {
+    
+    module beltup_straight_belt(belt_spec, length) {
+        ty = beltup_spec_belt_tooth_length(belt_spec);
+        tz = beltup_spec_belt_tooth_height(belt_spec);
 
-    module beltup_curved_belt(belt_spec, curve_radius, angle, teeth = true) {
+        sy = beltup_spec_belt_tooth_separation(belt_spec);
+
+        num_teeth = beltup_num_teeth(belt_spec, length);
+
+        x = beltup_spec_belt_width(belt_spec);
+        y = length;
+        z = beltup_spec_belt_thickness(belt_spec);
+
+        intersection() {
+
+            cube([x, y, z + tz + 1]);
+
+            union() {
+                cube([x, y, z]);
+
+                for(offset = [0 : num_teeth])
+                translate([0, offset * (sy + ty), z])
+                    cube([x, ty, tz]);
+            }
+        }
+    }
+
+    xpd = cross([0, 1, 0], extend2d_to_3d(normalize(b - a), 0));
+    normalized = normalize(b - a);
+    dot = dot2d([0, 1], normalize(b - a));
+    zangle = acos(dot) * sign(xpd[2]) + (flip ? 180 : 0);
+
+    translate(flip ? b : a)
+    rotate([0, -90, zangle])
+        beltup_straight_belt(belt_spec, magnitude(b - a));
+}
+
+//Calculate the tangent data from a point to a wheel
+function beltup_wheel_tangent_in(belt_spec, point, wheel_spec, wheel_pos, side, teeth_in = true) = let(
+
+    //Generate both tangents from current point to next belt.
+    tangents = circle_tangents_through_point(point, circ(wheel_pos, beltup_spec_wheel_inner_rad(wheel_spec) + beltup_spec_belt_thickness(belt_spec))),
+
+    //Choose which side to go to
+    tangent = side ? tangents[0] : tangents[1],
+
+    //Determine if we need to flip the belt
+    is_left = is_point_left_of_ray(tangent, wheel_pos),
+    flip = !is_left && teeth_in,
+
+    end_pos = point_along_ray(tangent, 1)
+) [
+    point,
+    end_pos,
+    flip,
+];
+
+function beltup_wheel_tangent_out(belt_spec, wheel_spec, wheel_pos, point, side, teeth_in = true) = let(
+    in = beltup_wheel_tangent_in(belt_spec, point, wheel_spec, wheel_pos, side, teeth_in)
+) [in[1], in[0], !in[2]];
+
+module beltup_render_belt_tangent(belt_spec, params) {
+    beltup_render_straight_belt(belt_spec, params[0], params[1], flip = params[2]);
+}
+
+module beltup_render_point_to_wheel_belt(belt_spec, point, wheel, wheel_pos, side, teeth_in = true) {
+
+    //Generate both tangents from current point to next belt.
+    tangents = circle_tangents_through_point(point, circ(wheel_pos, beltup_spec_wheel_inner_rad(wheel) + beltup_spec_belt_thickness(belt_spec)));
+
+    //Choose which side to go to
+    tangent = side ? tangents[0] : tangents[1];
+
+    //Determine if we need to flip the belt
+    is_left = is_point_left_of_ray(tangent, wheel_pos);
+    flip = !is_left && teeth_in;
+
+    //Place straight belt from previous point to point on wheel
+    next_pos = point_along_ray(tangent, 1);
+    beltup_render_straight_belt(belt_spec, point, next_pos, flip = flip);
+
+}
+
+module beltup_render_curve_between_tangents(belt_spec, start_point, start_side, wheel_spec, wheel_pos, end_point, end_side, teeth_in) {
+
+    //Render a curved section of belt < 180 degrees
+    module beltup_curved_belt(belt_spec, curve_radius, angle, teeth = false) {
 
         bt = beltup_spec_belt_thickness(belt_spec);
 
@@ -180,119 +216,44 @@ module beltup(belt, commands, closed) {
         {
 
             circumference = 2 * 3.14159 * curve_radius;
-            num_teeth = beltup_num_teeth(belt_spec, (angle / 360) * circumference);
+            num_teeth = beltup_num_teeth(belt_spec, circumference / 2);
 
             difference() {
 
                 //Render a 180 degree piece of belt
-                union() {
-                    difference() {
+                difference() {
+                    union() {
                         difference() {
                             cylinder(r = curve_radius + bt, h = tz);
                             translate([0, 0, -1]) cylinder(r = curve_radius, h = tz + 2);
                         }
 
-                        translate([0, -(curve_radius + bt) - 1, -1])
-                            cube([curve_radius + bt, (curve_radius + bt) * 2 + 2, beltup_spec_belt_width(belt_spec) + 2]);
+                        if (teeth)
+                        {
+                            for (index = [0 : num_teeth - 1]) {
+                                rotate([0, 0, ((sx + tx) * -(index + 0.5)) / (circumference / 360)]) translate([0, -curve_radius, 0])
+                                cube([1, ty, tz]);
+                            }
+                        }
+
                     }
 
-                    if (teeth)
-                    {
-                        for (index = [0 : num_teeth - 1]) {
-                            rotate([0, 0, ((sx + tx) * -(index + 0.5)) / (circumference / 360)]) translate([0, -curve_radius, 0])
-                            cube([1, ty, tz]);
-                        }
-                    }
+                    translate([0, -(curve_radius + bt) - 1, -1])
+                        cube([curve_radius + bt, (curve_radius + bt) * 2 + 2, beltup_spec_belt_width(belt_spec) + 2]);
                 }
 
                 //Place a block to cut off this belt at the right angle
-                translate([0, 0, -1]) rotate([0, 0, 180 - angle])
-                cube([curve_radius * 2, curve_radius * 2, tz + 2]);
+                translate([0, 0, -1]) rotate([0, 0, angle + 90]) translate([-curve_radius * 2, 0, 0])
+                cube([curve_radius * 4, curve_radius * 2, tz + 2]);
             }
         }
     }
 
-    module beltup_cmd_wheel_wheel(belt_spec, wheel_spec) {
+    //todo: test of curved belt - calculate correct angle
+    translate(wheel_pos)
+    rotate([])
+        beltup_curved_belt(belt_spec, beltup_spec_wheel_inner_rad(wheel_spec), 170);
 
-        bw = beltup_spec_belt_width(belt_spec);
-        bt = beltup_spec_belt_thickness(belt_spec);
-
-        ty = beltup_spec_belt_tooth_height(belt_spec);
-
-        wir = beltup_spec_wheel_inner_rad(wheel_spec);
-        wor = beltup_spec_wheel_outer_rad(wheel_spec);
-
-        arg_out_of_range(wir < (bt + ty), "beltup_cmd_wheel_wheel", "belt_radius", "Must be &gt;= belt_thickness + tooth_height")
-        {
-            union()
-            {
-                cylinder(r = wir, h = bw, $fs = 0.1);
-                translate([0, 0, -1]) cylinder(r = wir + wor, h = 1, $fs = 0.1);
-                translate([0, 0, bw]) cylinder(r = wir + wor, h = 1, $fs = 0.1);
-            }
-        }
-    }
-
-    function wrap_index(i, count) = i % count;
-    function wheel_triple(i, wheels) = [
-        wheels[wrap_index(i + 0, len(wheels))],
-        wheels[wrap_index(i + 1, len(wheels))],
-        wheels[wrap_index(i + 2, len(wheels))]
-    ];
-
-    function normalize2d(v) = v / norm(v);
-
-    module loop_iter(i, commands, current_position)
-    {
-        if (i < len(commands))
-        {
-            //Define the variables which hold the changed state to pass on to the next iteration
-            //Initialize them with the current state
-            new_position = current_position;
-            
-            cmd = commands[i];
-
-            if (beltup_type(cmd) == "cmd_wheel_at")
-            {
-                pos2d = beltup_cmd_wheel_pos(cmd);
-                translate([pos2d[0], pos2d[1], 0])
-                    beltup_cmd_wheel_wheel(belt, beltup_cmd_wheel_wheel(cmd));
-
-                loop_iter(i + 1, commands, beltup_cmd_goto_pos(cmd));
-            }
-            else if (beltup_type(cmd) == "cmd_goto")
-            {
-                if (current_position != "none")
-                {
-                    a = current_position;
-                    b = beltup_cmd_goto_pos(cmd);
-
-                    color("red") translate([a[0], a[1], 0]) cube([1, 1, 100], center = true);
-                    color("red") translate([b[0], b[1], 0]) cube([1, 1, 100], center = true);
-
-                    xpd = cross([0, 1, 0], extend2d_to_3d(normalize(b - a), 0));
-                    normalized = normalize(b - a);
-                    dot = dot2d([0, 1], normalize(b - a));
-
-                    rotate([0, -90, acos(dot) * sign(xpd[2])])
-                    beltup_straight_belt(belt, magnitude(b - a));
-                    
-                }
-
-                loop_iter(i + 1, commands, beltup_cmd_goto_pos(cmd));
-            }
-            else if (beltup_type(cmd) == "cmd_start_near")
-            {
-                invalid_arg(i != 0, "beltup", "commands", "cmd_start_near may only appear as the first command");
-            }
-            else if (beltup_type(cmd) == "cmd_close")
-            {
-                invalid_arg(i != len(commands) - 1, "beltup", "commands", "cmd_close may only appear as the last command");
-            }
-        }
-    }
-
-    //Enter the "loop" using recursion to get actual scope/state
-    loop_iter(0, commands, "none");
+    echo("todo: render belt curve");
 }
 
