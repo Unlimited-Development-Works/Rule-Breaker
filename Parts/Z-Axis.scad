@@ -4,7 +4,7 @@ use <Bearings.scad>;
 use <Makerbeam.scad>;
 use <Color.scad>;
 use <Motors.scad>;
-use <../Libs/Bevel-Gear.scad>;
+use <../Libs/Involute-Gear.scad>;
 
 module z_axis() {
     translate([100, -20, 0])
@@ -13,11 +13,12 @@ module z_axis() {
         translate([-10, 0, 307]) rotate([0, 180, 0]) bearing_mount_with_bearing();
 
         //vertical rods
-        translate([-10, 0, 0]) cylinder(d = 8, 310, $fn = 25);
+        translate([-30, 0, 0]) cylinder(d = 8, 310, $fn = 25);
         translate([50, 0, 0]) cylinder(d = 8, 310, $fn = 25);
 
         //Motor on threaded rod
         translate([-90, 20, 0]) {
+
             translate([0, -10, 0]) rotate([0, -90, 180]) motor_42BYGHW811();
             translate([68, -31, 21]) rotate([0, 90, 0]) bevel_gear();
         }
