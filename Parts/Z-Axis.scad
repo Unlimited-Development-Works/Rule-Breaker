@@ -18,11 +18,16 @@ module z_axis() {
 
         //Motor on threaded rod
         translate([-90, 20, 0]) {
-            translate([2, -54, 0]) rotate([0, 0, 0]) motor_42BYGHW811();
+
+            translate([0, -10, 0]) rotate([0, -90, 180]) motor_42BYGHW811();
+            translate([68, -31, 21]) rotate([0, 90, 0]) bevel_gear();
         }
 
+        //Bevel Gear
+        translate([-10, -1, 35]) rotate([0, 180, 0]) bevel_gear();
+
         //screw bearing on threaded rod
-        translate([-30, 0, 65]) TTypeLeadScrew();
+        translate([-10, 0, 55]) TTypeLeadScrew();
 
         //linear bearings on smooth rod
         translate([50, 0, 50]) LM8UU();

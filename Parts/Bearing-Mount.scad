@@ -2,11 +2,9 @@ BEARING_DIAMETER = 22;
 BEARING_DEPTH = 7;
 BEARING_INNER_HOLE = 8;
 module bearing_mount() {
-    beam_depth = 10;
     beam_width = 10;
 	padding = 10;
 	wall_thickness = 5;
-	beam_width = 10;
     color("Green") {
 		difference() {
 			union() {
