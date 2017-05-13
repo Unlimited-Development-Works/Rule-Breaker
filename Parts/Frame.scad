@@ -9,7 +9,7 @@ module frame() {
 
     module brackets() {
 
-        module side_brackets() {
+        /* module side_brackets() {
             translate([10, 0, 10]) rotate([90, 0, 0]) l_bracket_inner();
             translate([10, 0, 290]) rotate([90, 90, 0]) l_bracket_inner();
             translate([210, 0, 290]) rotate([90, 180, 0]) l_bracket_inner();
@@ -19,7 +19,7 @@ module frame() {
         side_brackets();
         translate([0, -220, 0]) rotate([0, 0, 90]) side_brackets();
         translate([220, -220, 0]) rotate([0, 0, 180]) side_brackets();
-        translate([220, 0, 0]) rotate([0, 0, 270]) side_brackets();
+        translate([220, 0, 0]) rotate([0, 0, 270]) side_brackets(); */
     }
 
     module bars() {
