@@ -20,11 +20,11 @@ module xy_axis() {
     module y_axis() {
 
         //rods
-        /* translate([-15, 0, -24]) rotate([-90, 0, 0]) cylinder(d = 8, 200, $fn = 25);
+        translate([-15, 0, -24]) rotate([-90, 0, 0]) cylinder(d = 8, 200, $fn = 25);
         translate([-15, 10, -24]) rotate([-90, 0, 0]) LM8UU();
 
         translate([195, 0, -24]) rotate([-90, 0, 0]) cylinder(d = 8, 200, $fn = 25);
-        translate([195, 10, -24]) rotate([-90, 0, 0]) LM8UU(); */
+        translate([195, 10, -24]) rotate([-90, 0, 0]) LM8UU();
 
         //rod holders
         module holder() {
@@ -41,8 +41,8 @@ module xy_axis() {
 
                 union() {
                     //Cube to remove half of the bigger cylinder
-                    translate([-20, 10, 10.01])
-                        cube([30, 30, 30]);
+                    translate([-15, 15, 10.01])
+                        cube([20, 20, 10]);
 
                     //Bottom screw hole
                     translate([-5, 6, 5]) rotate([0, 90, 0])
@@ -68,14 +68,20 @@ module xy_axis() {
         }
 
         //rod holders
-        translate([0, 0, 50])
+        translate([-10, 0, -50]) rotate([90, 0, -90])
             limey() holder();
+        translate([190, 200, -50]) rotate([90, 0, 90])
+            limey() holder();
+        translate([190, 0, -50]) rotate([90, 0, 90])
+            limey() mirror([1, 0, 0]) holder();
+        translate([-10, 200, -50]) rotate([90, 0, -90])
+            limey() mirror([1, 0, 0]) holder();
     }
 
     translate([0, 0, 290]) {
         union() {
-            /* translate([10, -200, -4])
-                x_axis(); */
+            translate([10, -200, -4])
+                x_axis();
             translate([20, -210, 0])
                 y_axis();
         }

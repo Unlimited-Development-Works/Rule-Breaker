@@ -9,9 +9,6 @@ use <../Libs/Involute-Gear.scad>;
 module z_axis() {
     translate([100, -20, 0])
     union() {
-        //Top threaded mounting point
-        translate([-10, 0, 307]) rotate([0, 180, 0]) bearing_mount_with_bearing();
-
         //vertical rods
         translate([-30, 0, 0]) cylinder(d = 8, 310, $fn = 25);
         translate([50, 0, 0]) cylinder(d = 8, 310, $fn = 25);
