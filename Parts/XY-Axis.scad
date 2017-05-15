@@ -1,30 +1,34 @@
 use <Makerbeam.scad>;
-use <Hotend.scad>;
 use <Brackets.scad>;
 use <Couplings.scad>;
 use <Bearings.scad>;
 use <Color.scad>;
+use <toolhead.scad>;
+use <../Libs/mistakes-were-made.scad>
 
-module xy_axis() {
+module xy_axis(toolhead_x = 0, toolhead_y = 0) {
 
     module x_axis() {
-        translate([200, 10, -10]) rotate([-90, 0, 90]) cylinder(d = 8, 200, $fn = 25);
-        translate([100, 10, -10]) rotate([-90, 0, 90]) LM8UU();
+        translate([200, 30, -8]) rotate([-90, 0, 90]) cylinder(d = 8, 200, $fn = 25);
+        translate([200, 30, -32]) rotate([-90, 0, 90]) cylinder(d = 8, 200, $fn = 25);
 
-        translate([200, 10, -30]) rotate([-90, 0, 90]) cylinder(d = 8, 200, $fn = 25);
-        translate([112, 10, -30]) rotate([-90, 0, 90]) LM8UU();
-
-        translate([100, 30, -50]) rotate([0, 0, 90]) e3d_v6();
+        translate([30 + toolhead_x, 0, 0])
+            toolhead();
     }
 
     module y_axis() {
 
         //rods
-        translate([-15, 0, -24]) rotate([-90, 0, 0]) cylinder(d = 8, 200, $fn = 25);
-        translate([-15, 10, -24]) rotate([-90, 0, 0]) LM8UU();
+        translate([-14, 0, -24]) rotate([-90, 0, 0]) cylinder(d = 8, 200, $fn = 25);
+        translate([194, 0, -24]) rotate([-90, 0, 0]) cylinder(d = 8, 200, $fn = 25);
 
-        translate([195, 0, -24]) rotate([-90, 0, 0]) cylinder(d = 8, 200, $fn = 25);
-        translate([195, 10, -24]) rotate([-90, 0, 0]) LM8UU();
+        //Bearings
+        translate([0, toolhead_y, 0]) {
+            translate([194, 10, -24]) rotate([-90, 0, 0]) LM8UU();
+            translate([194, 35, -24]) rotate([-90, 0, 0]) LM8UU();
+            translate([-14, 10, -24]) rotate([-90, 0, 0]) LM8UU();
+            translate([-14, 35, -24]) rotate([-90, 0, 0]) LM8UU();
+        }
 
         //rod holders
         module holder() {
@@ -78,14 +82,21 @@ module xy_axis() {
             limey() mirror([1, 0, 0]) holder();
     }
 
-    translate([0, 0, 290]) {
-        union() {
-            translate([10, -200, -4])
-                x_axis();
-            translate([20, -210, 0])
-                y_axis();
+    //Check toolhead position is in valid range
+    arg_out_of_range(toolhead_x < 0, "xy_axis", "toolhead_x", "Toolhead position is out of range")
+    arg_out_of_range(toolhead_x > 140, "xy_axis", "toolhead_x", "Toolhead position is out of range")
+    arg_out_of_range(toolhead_y < 0, "xy_axis", "toolhead_y", "Toolhead position is out of range")
+    arg_out_of_range(toolhead_y > 131, "xy_axis", "toolhead_y", "Toolhead position is out of range")
+    {
+        translate([0, 0, 290]) {
+            union() {
+                translate([10, -200 + toolhead_y, -4])
+                    x_axis();
+                translate([20, -210, 0])
+                    y_axis();
+            }
         }
     }
 }
 
-render() xy_axis();
+xy_axis(70, 131);
