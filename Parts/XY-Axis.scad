@@ -9,18 +9,18 @@ use <../Libs/mistakes-were-made.scad>
 module xy_axis(toolhead_x = 0, toolhead_y = 0) {
 
     module x_axis() {
-        translate([200, 30, -8]) rotate([-90, 0, 90]) cylinder(d = 8, 200, $fn = 25);
-        translate([200, 30, -32]) rotate([-90, 0, 90]) cylinder(d = 8, 200, $fn = 25);
+        translate([200, 30, -8]) rotate([-90, 0, 90]) cylinder(d = 8, 200, $fn = 15);
+        translate([200, 30, -32]) rotate([-90, 0, 90]) cylinder(d = 8, 200, $fn = 15);
 
-        translate([30 + toolhead_x, 0, 0])
+        translate([25 + toolhead_x, 0, 0])
             toolhead();
     }
 
     module y_axis() {
 
         //rods
-        translate([-14, 0, -24]) rotate([-90, 0, 0]) cylinder(d = 8, 200, $fn = 25);
-        translate([194, 0, -24]) rotate([-90, 0, 0]) cylinder(d = 8, 200, $fn = 25);
+        translate([-14, 0, -24]) rotate([-90, 0, 0]) cylinder(d = 8, 200, $fn = 15);
+        translate([194, 0, -24]) rotate([-90, 0, 0]) cylinder(d = 8, 200, $fn = 15);
 
         //Bearings
         translate([0, toolhead_y, 0]) {
@@ -30,8 +30,70 @@ module xy_axis(toolhead_x = 0, toolhead_y = 0) {
             translate([-14, 35, -24]) rotate([-90, 0, 0]) LM8UU();
         }
 
+        //Y carriage
+        module carriage_inner() {
+            difference() {
+                union() {
+                    //Main body
+                    translate([-11, 1, -15])
+                        cube([11, 47, 30]);
+
+                    //Rod containers
+                    translate([-11, 30, 12]) rotate([0, 90, 0])
+                        cylinder(d = 20, h = 11, $fn = 25);
+                    translate([-11, 30, -12]) rotate([0, 90, 0])
+                        cylinder(d = 20, h = 11, $fn = 25);
+                }
+
+                union() {
+                    //Bearing hole
+                    translate([0, -5, 0]) rotate([-90, 0, 0])
+                        cylinder(d = 15.5, h = 60, $fn = 45);
+
+                    //Rod holes
+                    translate([-23.7, 30, 12]) rotate([0, 90, 0])
+                        cylinder(d = 8.3, h = 20, $fn = 25);
+                    translate([-23.7, 30, -12]) rotate([0, 90, 0])
+                        cylinder(d = 8.3, h = 20, $fn = 25);
+
+                    //Screw holes for bearing clamp
+                    translate([-20, 6, 11]) rotate([0, 90, 0]) cylinder(d = 3, h = 40, $fn = 8);
+                    translate([-20, 6, -11]) rotate([0, 90, 0]) cylinder(d = 3, h = 40, $fn = 8);
+                    translate([-20, 43, 11]) rotate([0, 90, 0]) cylinder(d = 3, h = 40, $fn = 8);
+                    translate([-20, 43, -11]) rotate([0, 90, 0]) cylinder(d = 3, h = 40, $fn = 8);
+                }
+            }
+        }
+        module carriage_clamp(mirrored) {
+            difference() {
+                union() {
+                    //Main body
+                    translate([0, 1, -15])
+                        cube([11, 47, 30]);
+                }
+
+                union() {
+                    //Bearing hole
+                    translate([0, -5, 0]) rotate([-90, 0, 0])
+                        cylinder(d = 15.5, h = 60, $fn = 45);
+
+                    //Screw holes for bearing clamp
+                    translate([-20, 6, 11]) rotate([0, 90, 0]) cylinder(d = 3, h = 40, $fn = 8);
+                    translate([-20, 6, -11]) rotate([0, 90, 0]) cylinder(d = 3, h = 40, $fn = 8);
+                    translate([-20, 43, 11]) rotate([0, 90, 0]) cylinder(d = 3, h = 40, $fn = 8);
+                    translate([-20, 43, -11]) rotate([0, 90, 0]) cylinder(d = 3, h = 40, $fn = 8);
+                }
+            }
+        }
+        translate([0, toolhead_y + 10, -24]) {
+            translate([194, 0, 0]) carriage_inner();
+            translate([195, 0, 0]) carriage_clamp(false);
+            translate([-14, 0, 0]) mirror([]) carriage_inner();
+            translate([-15, 0, 0]) mirror([]) carriage_clamp(true);
+        }
+
         //rod holders
-        module holder() {
+        module rod_frame_holder() {
             difference() {
                 union() {
                     linear_extrude(height = 10)
@@ -70,23 +132,21 @@ module xy_axis(toolhead_x = 0, toolhead_y = 0) {
                 }
             }
         }
-
-        //rod holders
         translate([-10, 0, -50]) rotate([90, 0, -90])
-            limey() holder();
+            limey() rod_frame_holder();
         translate([190, 200, -50]) rotate([90, 0, 90])
-            limey() holder();
+            limey() rod_frame_holder();
         translate([190, 0, -50]) rotate([90, 0, 90])
-            limey() mirror([1, 0, 0]) holder();
+            limey() mirror([1, 0, 0]) rod_frame_holder();
         translate([-10, 200, -50]) rotate([90, 0, -90])
-            limey() mirror([1, 0, 0]) holder();
+            limey() mirror([1, 0, 0]) rod_frame_holder();
     }
 
     //Check toolhead position is in valid range
     arg_out_of_range(toolhead_x < 0, "xy_axis", "toolhead_x", "Toolhead position is out of range")
-    arg_out_of_range(toolhead_x > 140, "xy_axis", "toolhead_x", "Toolhead position is out of range")
+    arg_out_of_range(toolhead_x > 145, "xy_axis", "toolhead_x", "Toolhead position is out of range")
     arg_out_of_range(toolhead_y < 0, "xy_axis", "toolhead_y", "Toolhead position is out of range")
-    arg_out_of_range(toolhead_y > 131, "xy_axis", "toolhead_y", "Toolhead position is out of range")
+    arg_out_of_range(toolhead_y > 130, "xy_axis", "toolhead_y", "Toolhead position is out of range")
     {
         translate([0, 0, 290]) {
             union() {
@@ -99,4 +159,4 @@ module xy_axis(toolhead_x = 0, toolhead_y = 0) {
     }
 }
 
-xy_axis(70, 131);
+xy_axis(145, 0);
