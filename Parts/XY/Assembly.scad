@@ -32,7 +32,6 @@ module xy_axis(toolhead_x = 0, toolhead_y = 0) {
                 y_axis();
 
             translate([0, ty, 0]) {
-
                 x_axis();
                 
                 translate([tx, 0, 0])

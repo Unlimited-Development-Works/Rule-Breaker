@@ -5,8 +5,10 @@ use <../Color.scad>;
 module y_axis() {
 
     //rods
-    translate([-14, 0, -24]) rotate([-90, 0, 0]) cylinder(d = 8, 200, $fn = 15);
-    translate([194, 0, -24]) rotate([-90, 0, 0]) cylinder(d = 8, 200, $fn = 15);
+    not_printed() {
+        translate([-16, 0, -24]) rotate([-90, 0, 0]) cylinder(d = 8, 200, $fn = 15);
+        translate([196, 0, -24]) rotate([-90, 0, 0]) cylinder(d = 8, 200, $fn = 15);
+    }
 
     //rod holders
     module rod_frame_holder() {
@@ -48,14 +50,17 @@ module y_axis() {
             }
         }
     }
-    limey() {
-        translate([-10, 0, -50]) rotate([90, 0, -90])
+    printed() limey() {
+        translate([200, 0, -50]) rotate([90, 0, -90])
             rod_frame_holder();
-        translate([190, 200, -50]) rotate([90, 0, 90])
+
+        translate([-20, 200, -50]) rotate([90, 0, 90])
             rod_frame_holder();
-        translate([190, 0, -50]) rotate([90, 0, 90])
+
+        translate([-20, 0, -50]) rotate([90, 0, 90])
             mirror([1, 0, 0]) rod_frame_holder();
-        translate([-10, 200, -50]) rotate([90, 0, -90])
+
+        translate([200, 200, -50]) rotate([90, 0, -90])
             mirror([1, 0, 0]) rod_frame_holder();
     }
 }
