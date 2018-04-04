@@ -6,7 +6,7 @@ use <Parts/Frame.scad>;
 frame();
 z_axis();
 xy_axis(
-    116, //(sin($t * 360 + $t) * 0.5 + 0.5) * 116,
+    104, //(sin($t * 360 + $t) * 0.5 + 0.5) * 104,
     130 //(cos($t * 360) * 0.5 + 0.5) * 130
 );
 //electronics_bay();

@@ -36,7 +36,8 @@ function Carriage_Bearing_Separation() = 1;                     // Distance betw
 function Carriage_Clamp_Reduce_Length() = 1;                    // How much shorter is the hotend clamp than the length of the carriage
 function Carriage_Clamp_Hotend_Fix_Extra_Diameter() = 0.1;      // How much extra diameter to allow inside the hotend clamp
 function Carriage_Concealed_Nut_Head_Depth() = 1.75;            // Depth of the hole for the bolt head/nut concealed beneath the carriage bearings
+function Carriage_Half_Separation() = 0.35;
 
-function Hotend_Retainer_Extra_Diameter() = 2.5;       // Diameter of the retaining ring around the hotend mounting point
-function Hotend_Retainer_Guide_Diameter() = 2;         // Diameter of the 4 guides on the hotend retainer
+//Hotend retainer (part of carriage)
+function Hotend_Retainer_Extra_Diameter() = 2.5;            // Diameter of the retaining ring around the hotend mounting point
 function Hotend_Retainer_Pressfit_Extra_Diameter() = 0.15;  //Extra diameter to allow for the pressure fit of the hotend retainer

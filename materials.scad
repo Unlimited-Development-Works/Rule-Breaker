@@ -34,16 +34,18 @@ module jitter_color(c) {
     color(d) children();
 }
 
+function rc(mid) = max(0, min(255, rands(mid - 25, mid + 25, 1)[0])) / 255;
+
 module brass() {
-    not_printed() jitter_color([181 / 255, 166 / 255, 66 / 255]) children();
+    not_printed() jitter_color([rc(181), rc(166), 66 / 255]) children();
 }
 
 module PLA() {
-    printed("PLA") color(color("cornflowerblue")) children();
+    printed("PLA") color([rc(100), rc(149), 237 / 255]) children();
 }
 
 module PETG() {
-    printed("PETG") jitter_color([57 / 255, 255 / 255, 11 / 255, 1]) children();
+    printed("PETG") jitter_color([rc(57), rc(255), rc(11)]) children();
 }
 
 module nylon() {
