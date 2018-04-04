@@ -1,12 +1,11 @@
-use <Color.scad>;
+use <../materials.scad>;
 
 module bracket_bolt_hole_3m() {
         cylinder(h = 10, d = 3.2, $fn = 18);
     }
 
 module l_bracket() {
-    color("silver")
-    difference() {
+    metal() difference() {
         cube([20, 30, 1.5]);
         
         union() {
@@ -20,8 +19,7 @@ module l_bracket() {
 }
 
 module l_bracket_inner() {
-    limey()
-    difference() {
+    metal() difference() {
         union() {
             cube([1.5, 30, 10]);
             cube([30, 1.5, 10]);

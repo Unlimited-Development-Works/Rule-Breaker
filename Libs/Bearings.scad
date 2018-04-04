@@ -1,3 +1,5 @@
+use <../materials.scad>
+
 //24mm long x 15mm outer diameter x 8mm inner diameter
 //2 grooves with 14.5mm outer diameter
 //Grooves vary in width between 1mm and 1.25mm
@@ -6,7 +8,7 @@ function LM8UU_Length() = 24;
 function LM8UU_Diameter() = 15;
 
 module LM8UU() {
-    difference() {
+    not_printed() difference() {
         cylinder(d = LM8UU_Diameter(), LM8UU_Length(), $fn = 75);
         union() {
             translate([0, 0, -12]) cylinder(d = 8, 48, $fn = 35);

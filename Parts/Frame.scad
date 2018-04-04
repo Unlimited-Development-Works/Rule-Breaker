@@ -1,9 +1,7 @@
-// Printer
-use <Makerbeam.scad>;
+use <../Libs/Makerbeam.scad>;
 use <Brackets.scad>;
 use <Bearing-Mount.scad>;
 use <Power-Supply.scad>;
-use <Color.scad>;
 
 module frame() {
 

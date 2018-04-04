@@ -1,10 +1,12 @@
+use <../config.scad>
+use <../materials.scad>
+
 use <Bearing-Mount.scad>;
-use <Couplings.scad>;
-use <Bearings.scad>;
-use <Makerbeam.scad>;
-use <Color.scad>;
-use <Motors.scad>;
-use <../Libs/Involute-Gear.scad>;
+use <../Libs/Couplings.scad>;
+use <../Libs/Bearings.scad>;
+use <../Libs/Makerbeam.scad>;
+use <../Libs/Motors.scad>;
+use <../Libs/Bevel-Gear.scad>;
 
 module z_axis() {
     translate([100, -20, 0])
@@ -38,7 +40,7 @@ module z_axis() {
         %translate([-75, -160, 84]) cube([150, 150, 3]);
 
         //mounting part
-        limey() render() translate([-75, -160, 70])
+        PETG() render() translate([-75, -160, 70])
             cube([150, 150, 3]);
     }
 }

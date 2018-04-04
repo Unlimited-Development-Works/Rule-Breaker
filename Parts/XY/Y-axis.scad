@@ -1,11 +1,10 @@
 use <../../config.scad>;
-
-use <../Color.scad>;
+use <../../materials.scad>;
 
 module y_axis() {
 
     //rods
-    not_printed() {
+    metal() {
         translate([-16, 0, -24]) rotate([-90, 0, 0]) cylinder(d = 8, 200, $fn = 15);
         translate([196, 0, -24]) rotate([-90, 0, 0]) cylinder(d = 8, 200, $fn = 15);
     }
@@ -50,7 +49,7 @@ module y_axis() {
             }
         }
     }
-    printed() limey() {
+    PETG() {
         translate([200, 0, -50]) rotate([90, 0, -90])
             rod_frame_holder();
 

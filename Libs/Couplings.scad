@@ -1,10 +1,10 @@
-use <Color.scad>;
+use <../materials.scad>;
 
 //https://www.aliexpress.com/store/product/1pcs-K547-Aluminum-Motor-Shaft-Connector-Elastic-Flexible-Coupling-Coupler-20-Styles-Shaft-to-Shaft-D19L25/1853599_32647323572.html
 //Out diameter: 19mm
 //Length: 25mm
 module K547() {
-    difference() {
+    metal() difference() {
         cylinder(d = 19, 25, $fn = 50);
         
         union() {
@@ -27,8 +27,7 @@ module TTypeLeadScrew() {
         cylinder(d = 3.5, 20, $fn = 13);
     }
 
-    brass()
-    difference() {
+    brass() difference() {
         union() {
             cylinder(d = 9, 15, $fn = 25);
             translate([0, 0, 10]) cylinder(d = 22, 3.5, $fn = 45);

@@ -1,7 +1,7 @@
 use <../../config.scad>;
+use <../../materials.scad>;
 
-use <../Bearings.scad>;
-use <../Color.scad>;
+use <../../Libs/Bearings.scad>;
 use <../Wheels.scad>;
 
 module x_axis() {
@@ -69,7 +69,7 @@ module x_axis() {
     //Carriage parts (3 stacked parts: inner, mid and outer)
     module carriage_mid() {
 
-        limey() printed() difference() {
+        PETG() difference() {
             union() {
                 //Main body
                 translate([-x, -y / 2, -z / 2 - X_Axis_Carriage_Mid_Bearing_Surround()])
@@ -98,7 +98,7 @@ module x_axis() {
 
     module carriage_outer() {
 
-        limey() printed() difference() {
+        PETG() difference() {
             union() {
                 //Main body
                 translate([0, -y / 2, -z / 2 - X_Axis_Carriage_Mid_Bearing_Surround()])
@@ -125,7 +125,7 @@ module x_axis() {
         inner_z = z + X_Axis_Carriage_Inner_Extra_Height();
         idler_x = -20.5;
 
-        limey() printed() difference() {
+        PETG() difference() {
             union() {
                 //Main body
                 translate([-x - inner_x, -inner_y / 2, -z / 2 - X_Axis_Carriage_Mid_Bearing_Surround()])
@@ -153,8 +153,8 @@ module x_axis() {
                     }
 
                     //belt hole
-                    translate([idler_inner_diameter() / 2 - X_Axis_Belt_Hole_Thickness() / 2, -50, 0])
-                        cube([X_Axis_Belt_Hole_Thickness(), 100, idler_hole_z]);
+                    translate([idler_inner_diameter() / 2 - X_Axis_Belt_Hole_Extra_Clearance() / 2, -50, 0])
+                        cube([100, 100, idler_hole_z]);
                 }
 
                 //idler screw hole
@@ -168,24 +168,24 @@ module x_axis() {
 
         //idlers
         translate([idler_x, 0, -4.25]) {
-            not_printed() translate([0, 0, idler_height() / 2 + X_Axis_Carriage_Idler_Vertical_Separation() / 2]) idler();
-            not_printed() translate([0, 0, -idler_height() / 2 - X_Axis_Carriage_Idler_Vertical_Separation() / 2]) idler();
+            metal() translate([0, 0, idler_height() / 2 + X_Axis_Carriage_Idler_Vertical_Separation() / 2]) idler();
+            metal() translate([0, 0, -idler_height() / 2 - X_Axis_Carriage_Idler_Vertical_Separation() / 2]) idler();
         }
     }
 
     translate([6, 0, -24]) {
         //Rods
-        not_printed() translate([204, 0, rod_z]) rotate([0, -90, 0]) {
+        metal() translate([204, 0, rod_z]) rotate([0, -90, 0]) {
             translate([0, -X_Axis_Rod_Separation() / 2, 0]) cylinder(d = 8, 200, $fn = 15);
             translate([0, X_Axis_Rod_Separation() / 2, 0]) cylinder(d = 8, 200, $fn = 15);
         }
 
         //Bearings
-        not_printed() translate([0, -LM8UU_Length() - 0.25, 0]) {
+        metal("darkgrey") translate([0, -LM8UU_Length() - 0.25, 0]) {
             translate([210, 0, 0]) rotate([-90, 0, 0]) LM8UU();
             translate([-2, 0, 0]) rotate([-90, 0, 0]) LM8UU();
         }
-        not_printed() translate([0, 0.25, 0]) {
+        metal("darkgrey") translate([0, 0.25, 0]) {
             translate([210, 0, 0]) rotate([-90, 0, 0]) LM8UU();
             translate([-2, 0, 0]) rotate([-90, 0, 0]) LM8UU();
         }

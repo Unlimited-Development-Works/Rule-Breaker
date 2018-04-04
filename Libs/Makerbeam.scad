@@ -1,3 +1,5 @@
+use <../materials.scad>
+
 module makerbeam_300() {
     makerbeam(300);
 }
@@ -28,7 +30,7 @@ module makerbeam(length) {
     z = 10;
     gap = 3;
     corner = (x - gap) / 2;
-    color("DimGray") {
+    metal("DimGray") {
         translate([0, 0, 0])
             cube([corner, y, corner]);
 

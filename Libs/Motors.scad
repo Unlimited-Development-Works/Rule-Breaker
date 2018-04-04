@@ -1,3 +1,5 @@
+use <../materials.scad>
+
 MOTOR_SCREW_HOLE_DEPTH=8;
 module screw_hole() {
     cylinder(h = MOTOR_SCREW_HOLE_DEPTH, d = 2.5, $fn = 15);
@@ -14,8 +16,7 @@ SM-42BYG011-25
 Small
 */
 module motor_SM42BYG01125() {
-    color("silver")
-    difference() {
+    metal() difference() {
         union() {
             cube([42, 42, 33]);
             translate([21, 21, 33])
@@ -46,8 +47,7 @@ module motor_42BYGHW811() {
     HEIGHT=MEDIUM_MOTOR_HEIGHT;
     SCREW_OFFSET=MEDIUM_MOTOR_SCREW_OFFSET;
     SCREW_HEIGHT_OFFSET=MEDIUM_MOTOR_SCREW_HEIGHT_OFFSET;
-    color("silver")
-    difference() {
+    metal() difference() {
         union() {
             cube([WIDTH, WIDTH, HEIGHT]);
             translate([WIDTH / 2, WIDTH / 2, HEIGHT])
