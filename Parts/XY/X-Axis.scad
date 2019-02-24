@@ -2,7 +2,7 @@ use <../../config.scad>;
 use <../../materials.scad>;
 
 use <../../Libs/Bearings.scad>;
-use <../Wheels.scad>;
+use <../../Libs/Wheels.scad>;
 
 module x_axis() {
 
@@ -125,7 +125,7 @@ module x_axis() {
         inner_z = z + X_Axis_Carriage_Inner_Extra_Height();
         idler_x = -20.5;
 
-        PETG() difference() {
+        PLA() difference() {
             union() {
                 //Main body
                 translate([-x - inner_x, -inner_y / 2, -z / 2 - X_Axis_Carriage_Mid_Bearing_Surround()])
@@ -209,7 +209,7 @@ module x_axis() {
                 carriage_outer();
 
             translate([-0.15, 0, 0])
-            carriage_inner();
+                carriage_inner();
         }
     }
 }
