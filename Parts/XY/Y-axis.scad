@@ -3,21 +3,24 @@ use <../../materials.scad>;
 
 module y_axis() {
 
-    //rods
+    //rods (0.2mm shorter than reality, to prevent artifacts in rendering)
     metal() {
-        translate([-16, 0, -24]) rotate([-90, 0, 0]) cylinder(d = 8, 200, $fn = 15);
-        translate([196, 0, -24]) rotate([-90, 0, 0]) cylinder(d = 8, 200, $fn = 15);
+        translate([-16, -0.1, -24]) rotate([-90, 0, 0]) cylinder(d = 8, 199.9, $fn = 15);
+        translate([196, -0.1, -24]) rotate([-90, 0, 0]) cylinder(d = 8, 199.9, $fn = 15);
     }
 
     //rod holders
     module rod_frame_holder() {
         difference() {
             union() {
+
+                //body of holder
                 linear_extrude(height = 10)
                     polygon([
                         [0, 0], [-2, 0], [-2, 12], [-10, 20], [-10, 42], [-15, 48], [-25, 48], [-25, 50], [0, 50]
                     ]);
 
+                //Cylinder sticking out the side to encompass rods
                 translate([-10, 26, 4]) rotate([0, 90, 0])
                     cylinder(d = 15.5, h = 10, $fn = 125);
             }
@@ -63,3 +66,5 @@ module y_axis() {
             mirror([1, 0, 0]) rod_frame_holder();
     }
 }
+
+y_axis();

@@ -3,30 +3,45 @@ use <Specs.scad>;
 /* Render a wheel according to the given specifications */
 module beltup_render_wheel(wheel_instance) {
 
-    wheel_spec = beltup_spec_wheel_instance_spec(wheel_instance);
-    belt_spec = beltup_spec_wheel_instance_belt(wheel_instance);
-    position = beltup_spec_wheel_instance_pos(wheel_instance);
-
-    bw = beltup_spec_belt_width(belt_spec);
-    bt = beltup_spec_belt_thickness(belt_spec);
-
-    ty = beltup_spec_belt_tooth_height(belt_spec);
-
-    wir = beltup_spec_wheel_inner_rad(wheel_spec);
-    wor = beltup_spec_wheel_outer_rad(wheel_spec);
-
-    arg_out_of_range(wir < (bt + ty), "beltup_cmd_wheel_wheel", "belt_radius", "Must be &gt;= belt_thickness + tooth_height")
+    mwm_assert(wheel_instance[0] != "wheel_instance", "Wrong type", "beltup_render_wheel", concat("Expected a `wheel_instance`, got a `", wheel_instance[0], "`"))
     {
-        translate(position) difference() {
-            union()
-            {
-                translate([0, 0, -1]) cylinder(r = wir, h = bw + 2, $fn = 100);
-                translate([0, 0, -2]) cylinder(r = wir + wor, h = 1, $fn = 23);
-                translate([0, 0, bw + 1]) cylinder(r = wir + wor, h = 1, $fn = 23);
-            }
+        wheel_spec = beltup_spec_wheel_instance_spec(wheel_instance);
+        belt_spec = beltup_spec_wheel_instance_belt(wheel_instance);
 
-            translate([0, 0, -bw])
-                cylinder(r = beltup_spec_wheel_hole_radius(wheel_spec), h = bw * 3, $fs = 0.1);
+        mwm_assert(belt_spec[0] != "belt", "Wrong type", "beltup_render_wheel", concat("Expected a `belt`, got a `", belt_spec[0], "`"))
+        {
+            ztop = beltup_spec_wheel_outer_z_top(wheel_spec);
+            zbot = beltup_spec_wheel_outer_z_bot(wheel_spec);
+
+            position = beltup_spec_wheel_instance_pos(wheel_instance);
+
+            bw = beltup_spec_belt_width(belt_spec);
+            bt = beltup_spec_belt_thickness(belt_spec);
+
+            ty = beltup_spec_belt_tooth_height(belt_spec);
+
+            wir = beltup_spec_wheel_inner_rad(wheel_spec);
+            wor = beltup_spec_wheel_outer_rad(wheel_spec);
+
+            arg_out_of_range(wir < (bt + ty), "beltup_cmd_wheel_wheel", "belt_radius", "Must be &gt;= belt_thickness + tooth_height")
+            {
+                translate(position) difference() {
+                    union()
+                    {
+                        //Center cylinder
+                        translate([0, 0, 0]) cylinder(r = wir, h = bw, $fn = 100);
+
+                        //bot belt guide
+                        translate([0, 0, -zbot]) cylinder(r = wir + wor, h = zbot, $fn = 23);
+
+                        //top belt guide
+                        translate([0, 0, bw]) cylinder(r = wir + wor, h = ztop, $fn = 23);
+                    }
+
+                    translate([0, 0, -bw])
+                        cylinder(r = beltup_spec_wheel_hole_radius(wheel_spec), h = bw * 3, $fs = 0.1);
+                }
+            }
         }
     }
 }

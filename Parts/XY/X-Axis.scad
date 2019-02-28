@@ -3,8 +3,9 @@ use <../../materials.scad>;
 
 use <../../Libs/Bearings.scad>;
 use <../../Libs/Wheels.scad>;
+use <../../Libs/BeltUp/Core.scad>;
 
-module x_axis() {
+module x_axis(belt_spec, idler_spec) {
 
     rod_z = -LM8UU_Diameter() / 2 - 4 - X_Axis_Carriage_Rod_Vertical_Space();
     rod_radius = 8 / 2;
@@ -167,10 +168,10 @@ module x_axis() {
         }
 
         //idlers
-        translate([idler_x, 0, -4.25]) {
-            metal() translate([0, 0, idler_height() / 2 + X_Axis_Carriage_Idler_Vertical_Separation() / 2]) idler();
-            metal() translate([0, 0, -idler_height() / 2 - X_Axis_Carriage_Idler_Vertical_Separation() / 2]) idler();
-        }
+        top_idler = beltup_create_wheel(belt_spec, idler_spec, [idler_x, 0, idler_height() / 2 + X_Axis_Carriage_Idler_Vertical_Separation() / 2 - 3], true);
+        bot_idler = beltup_create_wheel(belt_spec, idler_spec, [idler_x, 0, -idler_height() / 2 - X_Axis_Carriage_Idler_Vertical_Separation() / 2 - 3], true);
+        metal() beltup_render_wheel(top_idler);
+        metal() beltup_render_wheel(bot_idler);
     }
 
     translate([6, 0, -24]) {
@@ -214,4 +215,6 @@ module x_axis() {
     }
 }
 
-x_axis();
+belt_spec = beltup_specify_belt(width = 6, thickness = 1, tooth_length = 1, tooth_separation = 1, tooth_height = 1, color = "red");
+idler_spec = idler_beltup_spec();
+x_axis(belt_spec, idler_spec);
