@@ -29,9 +29,13 @@ function X_Axis_Carriage_Inner_Extra_Height() = 4;
 function X_Axis_Belt_Hole_Extra_Clearance() = 3;
 
 //Y Axis
+// -- No config
 
+//Unified Axis
+function U_Axis_Carriage_Screw_Guide_Diameter() = 10;
+function U_Axis_Carriage_Screw_Hole_Diameter() = 3.7;
 
-//Carriage
+//Tool Carriage
 function Carriage_Bearing_Separation() = 1;                     // Distance between bearings on the carriage (along rods)
 function Carriage_Clamp_Reduce_Length() = 1;                    // How much shorter is the hotend clamp than the length of the carriage
 function Carriage_Clamp_Hotend_Fix_Extra_Diameter() = 0.1;      // How much extra diameter to allow inside the hotend clamp
