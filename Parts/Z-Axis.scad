@@ -6,7 +6,6 @@ use <../Libs/Couplings.scad>;
 use <../Libs/Bearings.scad>;
 use <../Libs/Makerbeam.scad>;
 use <../Libs/Motors.scad>;
-use <../Libs/Bevel-Gear.scad>;
 
 module z_axis() {
     translate([100, -20, 0])
@@ -19,11 +18,7 @@ module z_axis() {
         translate([-90, 20, 0]) {
 
             translate([0, -10, 0]) rotate([0, -90, 180]) motor_42BYGHW811();
-            translate([68, -31, 21]) rotate([0, 90, 0]) bevel_gear();
         }
-
-        //Bevel Gear
-        translate([-10, -1, 35]) rotate([0, 180, 0]) bevel_gear();
 
         //screw bearing on threaded rod
         translate([-10, 0, 55]) TTypeLeadScrew();

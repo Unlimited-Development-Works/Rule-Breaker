@@ -2,6 +2,7 @@ use <../../config.scad>;
 use <../../materials.scad>;
 
 use <../../Libs/Bearings.scad>;
+use <../../Libs/Rods.scad>;
 
 module outer_axis() {
 
@@ -12,12 +13,7 @@ module outer_axis() {
         carriage_height = LM8UU_Diameter() + 15;
         carriage_radius = carriage_height / 2 + 0.5;
 
-        translate([0, 0, -20]) {
-
-            //translate([-LM8UU_Length() / 2 - 0.25, 0, 0]) rotate([90, 0, 90]) LM8UU();
-            //translate([LM8UU_Length() / 2 + 0.25, 0, 0]) rotate([90, 0, 90]) LM8UU();
-
-            // Inner carriage
+        module carriage_inner() {
             PETG() {
 
                 //Translate back so that rest of carriage is correctly aligned around bearing midpoint
@@ -33,11 +29,8 @@ module outer_axis() {
                                 translate([0, 0, carriage_height / 2]) rotate([90, 0, 90])  cylinder(r = carriage_radius, h = 100, $fn = 55);
                             }
 
-                            //cylinder around rod with hole for rod
-                            difference() {
-                                translate([LM8UU_Length() + 0.5, 0, 15 + carriage_height / 2]) rotate([-90, 0, 0]) cylinder(d = 8 + 10, h = carriage_depth, $fn = 100);
-                                translate([LM8UU_Length() + 0.5, 4.5, 15 + carriage_height / 2]) rotate([-90, 0, 0]) cylinder(d = 8 + Rod_Pressure_Fit_Extra_Diameter(), h = carriage_depth * 2);
-                            }
+                            //cylinder around rod
+                            translate([LM8UU_Length() + 0.5, 0, 15 + carriage_height / 2]) rotate([-90, 0, 0]) cylinder(d = 8 + 10, h = carriage_depth, $fn = 100);
 
                             //bolt fixtures
                             translate([10, 0, 0]) {
@@ -65,12 +58,16 @@ module outer_axis() {
                             }
 
                             bearing_cutout();
+
+                            //Hole for rod
+                            translate([LM8UU_Length() + 0.5, 4.5, 15 + carriage_height / 2]) rotate([-90, 0, 0]) cylinder(d = 8 + Rod_Pressure_Fit_Extra_Diameter(), h = carriage_depth * 2, $fn = 55);
                         }
                     }
                 }
             }
+        }
 
-            // Outer carriage
+        module carriage_outer() {
             PETG() {
 
                 //Translate back so that rest of carriage is correctly aligned around bearing midpoint
@@ -117,6 +114,16 @@ module outer_axis() {
             }
         }
 
+        translate([0, 0, -20]) {
+
+            translate([-LM8UU_Length() / 2 - 0.25, 0, 0]) rotate([90, 0, 90]) LM8UU();
+            translate([LM8UU_Length() / 2 + 0.25, 0, 0]) rotate([90, 0, 90]) LM8UU();
+
+            carriage_inner();
+            carriage_outer();
+            
+        }
+
         module bearing_cutout() {
             translate([-20, 0, carriage_height / 2])
                 rotate([90, 0, 90])
@@ -151,7 +158,8 @@ module outer_axis() {
     translate([0, -5, -20]) carriage();
     translate([0, 205, -20]) mirror([0, 1, 0]) carriage();
 
-    metal() translate([LM8UU_Length() / 2, 0, -25]) {
-        rotate([-90, 0, 0]) cylinder(d = 8, 199.9, $fn = 15);
-    }
+    translate([LM8UU_Length() / 2, 0, -25]) rotate([-90, 0, 0])
+        RodD8xL200();
 }
+
+outer_axis();

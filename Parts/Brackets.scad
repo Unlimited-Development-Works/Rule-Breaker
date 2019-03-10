@@ -1,8 +1,8 @@
 use <../materials.scad>;
 
 module bracket_bolt_hole_3m() {
-        cylinder(h = 10, d = 3.2, $fn = 18);
-    }
+    cylinder(h = 10, d = 3.2, $fn = 18);
+}
 
 module l_bracket() {
     metal() difference() {
